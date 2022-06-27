@@ -1,0 +1,41 @@
+game:GetService("RunService").RenderStepped:Connect(
+    function()
+    if Plr == nil then
+        return
+    elseif not Plr.Character then
+        return
+    end
+    if not Plr.Character:FindFirstChild(AimingSettings.Aimbot.Hitbox) then
+        return
+    end
+    if Locking and AimingSettings.Aimbot.MouseMode then
+        local goal =
+        CC:WorldToScreenPoint(
+            Plr.Character[AimingSettings.Aimbot.Hitbox].Position +
+            (Plr.Character[AimingSettings.Aimbot.Hitbox].Velocity * AimingSettings.Aimbot.PredictionAmount)
+        )
+        mousemoverel(goal.X - LocalMouse.X, goal.Y - LocalMouse.Y)
+    else wait()
+    end
+
+    if Locking and AimingSettings.Aimbot.CameraMode and not AimingSettings.Aimbot.Smoothing then
+        workspace.CurrentCamera.CFrame = CFrame.new(
+            workspace.CurrentCamera.CFrame.Position,
+            Plr.Character[AimingSettings.Aimbot.Hitbox].Position +
+            Plr.Character[AimingSettings.Aimbot.Hitbox].Velocity * AimingSettings.Aimbot.PredictionAmount
+        )
+    elseif Locking and AimingSettings.Aimbot.CameraMode and AimingSettings.Aimbot.Smoothing then
+        local Main =
+        CFrame.new(
+            workspace.CurrentCamera.CFrame.p,
+            Plr.Character[AimingSettings.Aimbot.Hitbox].Position +
+            Plr.Character[AimingSettings.Aimbot.Hitbox].Velocity * AimingSettings.Aimbot.PredictionAmount
+        )
+        workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame:Lerp(
+            Main,
+            AimingSettings.Aimbot.Smoothness,
+            Enum.EasingStyle.Elastic,
+            Enum.EasingDirection.InOut
+        )
+    else wait()
+    end
